@@ -19,7 +19,7 @@ void simple_math(void)
     float a, b;
     char op;
     int ret;
-    ret = scanf("%f %s %f", &a, &op, &b);
+    ret = scanf("%f %c %f", &a, &op, &b);
     if (ret > 0) {
         float c = 0;
         switch (op)
