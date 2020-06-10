@@ -7,7 +7,7 @@
 void ascii_chart(char min, char max)
 {
     for (int i = min; i <= max; i++) {
-        printf("%3d 0x%x ", i, i);
+        printf("%3d 0x%02x ", i, i);
         if ( !isprint(i) ) {
             printf("?");
         } else {
