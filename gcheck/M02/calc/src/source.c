@@ -21,9 +21,9 @@ void simple_math(void)
     int ret;
     ret = scanf("%f %s %f", &a, &op, &b);
     if (ret > 0) {
+        float c = 0;
         switch (op)
         {
-        float c;
         case '+':
             c = a + b;
             printf("%.1f\n", c);
@@ -45,7 +45,7 @@ void simple_math(void)
             break;
 
         default:
-            printf("ERR");
+            printf("ERR\n");
             break;
         }
         
