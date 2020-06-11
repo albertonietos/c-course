@@ -29,7 +29,7 @@ int main()
         qstr_print(retptr);
         printf("\n");
     }
-    retptr = qstr_strstr(str, "nelja");
+    retptr = qstr_strstr(str, "nelja?");
     if (!retptr)
         printf("qstr_strstr returned NULL: CORRECT\n");
     else
