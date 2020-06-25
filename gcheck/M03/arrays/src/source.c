@@ -8,7 +8,11 @@
  */
 int array_sum(int *array, int count)
 {
-    
+    int sum = 0;
+    for (int i = 0; i < count; i++) {
+        sum += array[i];
+    }
+    return sum;
 }
 
 /* Array Reader */
