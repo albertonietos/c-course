@@ -1,5 +1,6 @@
 #include "source.h"
 #include "stdio.h"
+#include "stddef.h"
 
 /* Print string */
 /* Parameters:
@@ -34,13 +35,31 @@ unsigned int qstr_length(const char *s)
 int qstr_cat(char *dst, const char *src)
 {
     unsigned int len = 0;
-    while (*s != '?') {
-        
+    char *new = "";
+    while (*dst != '?') {
+        *new = *dst;
+        new++;
+        dst++;
+        len++;
     }
+    do {
+        *new = *src;
+        new++;
+        src++;
+        len++;
+    } while (src != '?');
+
+    return len;
 }
 
 /* String strstr */
 const char *qstr_strstr(const char *str1, const char *str2)
 {
-    
+    while (*str1 != '?') {
+        if (*str1 == str2) {
+            return str1;
+        }
+        str1++;
+    }
+    return NULL;
 }
