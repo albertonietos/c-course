@@ -4,7 +4,7 @@
 
 char *my_toupper(char *dest, const char *src)
 {
-    for (size_t i = 0; i < strlen(src); i++) {
+    while (*src != '\0') {
         if (*src == '?') {
             *dest = '!';
             dest++;
@@ -14,8 +14,9 @@ char *my_toupper(char *dest, const char *src)
             *dest = '!';
             dest++;
             *dest = '!';
+            dest++;
         } else {
-            *dest = toupper(*(src + i));
+            *dest = toupper(*src);
             dest++;
         }
         src++;
