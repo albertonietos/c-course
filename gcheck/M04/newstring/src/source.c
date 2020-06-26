@@ -35,20 +35,12 @@ unsigned int qstr_length(const char *s)
 int qstr_cat(char *dst, const char *src)
 {
     unsigned int len = 0;
-    char *new = "";
-    while (*dst != '?') {
-        *new = *dst;
-        new++;
-        dst++;
+    while (*src != '?') {
+        *dst = *src;
+        src++; dst++;
         len++;
     }
-    do {
-        *new = *src;
-        new++;
-        src++;
-        len++;
-    } while (src != '?');
-
+    *dst = '?';
     return len;
 }
 
