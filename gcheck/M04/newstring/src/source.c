@@ -54,31 +54,35 @@ int qstr_cat(char *dst, const char *src)
 const char *qstr_strstr(const char *str1, const char *str2)
 {
     const char *ptr;
+    int i = 0; // index for str1
+    int j = 0; // index for str2
+    int store_i = 0;
 
-    while (*str1 != '?') {
-        while (*str1 != *str2 && *str1 != '?') {
+    while (*(str1 + i) != '?') {
+        while (*(str1 + i) != *(str2 + 0) && *(str1 + i) != '?') {
             // If there is no match, keep looking
-            str1++;
+            i++;
         }
-        if (*str1 == '?') {
+        if (*(str1 + i) == '?') {
             // If we arrived at the end of str1, finish without sucess
             return NULL;
         } else {
             // If we found a location where *str1==*str2, it could be the location we are looking for
-            ptr = str1;
+            ptr = str1 + i;
+            store_i = i;
             // Check that the following characters match as well
-            while (*str1 == *str2 && *str1 != '?' && *str2 != '?') {
-                str1++;
-                str2++;
+            while (*(str1 + i) == *(str2 + j) && *(str1 + i) != '?' && *(str2 + j) != '?') {
+                i++;
+                j++;
             }
             
-            if (*str2 == '?') { // If loop ended because str2 is done, we have found a match
+            if (*(str2 + j) == '?') { // If loop ended because str2 is done, we have found a match
                 return ptr;
-            } else if (*str1 == '?') { // If loop ended becasue str1 is done, it did not find a match
+            } else if (*(str1 + i) == '?') { // If loop ended becasue str1 is done, it did not find a match
                 return NULL;
             }
-            
-            ptr++;
+            i = store_i + 1; // Start next iteration after index investigated
+            j = 0; //Reset index for str2
         }
     }
     return NULL;
