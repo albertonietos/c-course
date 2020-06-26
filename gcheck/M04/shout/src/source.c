@@ -7,7 +7,11 @@ char *my_toupper(char *dest, const char *src)
         if (*(src + i) == '?') {
             *(dest + i) = '!';
         } else if (*(src + i) == '.') {
-            *(dest + i) = '!!!';
+            *(dest + i) = '!';
+            dest++;
+            *(dest + i) = '!';
+            dest++;
+            *(dest + i) = '!';
         } else {
             *(dest + i) = toupper(*(src + i));
         }
