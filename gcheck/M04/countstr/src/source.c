@@ -9,14 +9,11 @@
 int num_substr(const char *str, const char *sub)
 {
     int count = 0;
-    char *str_cpy = str;
-    printf("str_copy: %s\n", str_cpy);
+    const char *str_cpy = str;
     char *ptr;
     while (ptr = strstr(str_cpy, sub)) {
-        printf("ptr: %s\n", ptr);
         count++;
         str_cpy = ptr + strlen(sub); // move str_cpy pointer to skip the current substring
-        printf("str_copy: %s\n", str_cpy);
     }
     return count;
 }
