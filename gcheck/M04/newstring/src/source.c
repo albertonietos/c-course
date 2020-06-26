@@ -57,28 +57,29 @@ const char *qstr_strstr(const char *str1, const char *str2)
 
     while (*str1 != '?') {
         while (*str1 != *str2 && *str1 != '?') {
-            // Keep looking
+            // If there is no match, keep looking
             str1++;
         }
         if (*str1 == '?') {
-            // If ending of str1, finish
+            // If we arrived at the end of str1, finish without sucess
             return NULL;
         } else {
-            // If not, it could be the location we are looking for
+            // If we found a location where *str1==*str2, it could be the location we are looking for
             ptr = str1;
+            // Check that the following characters match as well
             while (*str1 == *str2 && *str1 != '?' && *str2 != '?') {
                 str1++;
                 str2++;
             }
-            // If loop ended because str2 is done, we have found a match
-            if (*str2 == '?') {
+            
+            if (*str2 == '?') { // If loop ended because str2 is done, we have found a match
                 return ptr;
-            }
-            // If loop ended becasue str1 is done, it did not find a match
-            if (*str1 == '?') {
+            } else if (*str1 == '?') { // If loop ended becasue str1 is done, it did not find a match
                 return NULL;
             }
+            
             ptr++;
         }
     }
+    return NULL;
 }
