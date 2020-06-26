@@ -47,12 +47,32 @@ int qstr_cat(char *dst, const char *src)
 /* String strstr */
 const char *qstr_strstr(const char *str1, const char *str2)
 {
+    const char *ptr;
+
     while (*str1 != '?') {
-        if (*str1 == *str2) {
-            return str1;
+        while (*str1 != *str2 && *str1 != '?') {
+            // Keep looking
+            str1++;
         }
-        str1++;
-        str2++;
+        if (*str1 == '?') {
+            // If ending of str1, finish
+            return NULL;
+        } else {
+            // If not, it could be the location we are looking for
+            ptr = str1;
+            while (*str1 == *str2 && *str1 != '?' && *str2 != '?') {
+                str1++;
+                str2++;
+            }
+            // If loop ended because str2 is done, we have found a match
+            if (*str2 == '?') {
+                return ptr;
+            }
+            // If loop ended becasue str1 is done, it did not find a match
+            if (*str1 == '?') {
+                return NULL;
+            }
+            ptr++;
+        }
     }
-    return NULL;
 }
