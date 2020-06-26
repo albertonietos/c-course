@@ -4,19 +4,22 @@
 
 char *my_toupper(char *dest, const char *src)
 {
-	for (int i = 0; *(src + i) != '\0'; i++) {
-        if (*(src + i) == '?') {
-            *(dest + i) = '!';
-        } else if (*(src + i) == '.') {
-            *(dest + i) = '!';
+    for (size_t i = 0; i < strlen(src); i++) {
+        if (*src == '?') {
+            *dest = '!';
             dest++;
-            *(dest + i) = '!';
+        } else if (*src == '.') {
+            *dest = '!';
             dest++;
-            *(dest + i) = '!';
+            *dest = '!';
+            dest++;
+            *dest = '!';
         } else {
-            *(dest + i) = toupper(*(src + i));
+            *dest = toupper(*(src + i));
+            dest++;
         }
+        src++;
     }
-    dest[strlen(dest) - 1] = '\0';
+    *dest = '\0';
     return dest;
 }
