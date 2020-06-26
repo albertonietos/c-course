@@ -48,10 +48,11 @@ int qstr_cat(char *dst, const char *src)
 const char *qstr_strstr(const char *str1, const char *str2)
 {
     while (*str1 != '?') {
-        if (*str1 == str2) {
+        if (*str1 == *str2) {
             return str1;
         }
         str1++;
+        str2++;
     }
     return NULL;
 }
