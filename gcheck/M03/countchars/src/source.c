@@ -11,10 +11,14 @@ unsigned int arraylen(const char *array)
 
 void countchars(const char *array, unsigned int *counts)
 {
-    int ch = 0;
+    unsigned int ch = 0;
     while (array[ch] != 0) {
-        ++counts[array[ch]];
-        ch++;
+        printf("int: %d, ", ch);
+        printf("array[ch]: %c \n", array[ch]);
+        // Add one to current character's count
+        unsigned int char_index = array[ch];
+        counts[char_index]++;
+        ch++; // Next index in array
     }
 }
 
