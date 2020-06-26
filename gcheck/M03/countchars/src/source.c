@@ -11,7 +11,11 @@ unsigned int arraylen(const char *array)
 
 void countchars(const char *array, unsigned int *counts)
 {
-    
+    int ch = 0;
+    while (array[ch] != 0) {
+        ++counts[array[ch]];
+        ch++;
+    }
 }
 
 
