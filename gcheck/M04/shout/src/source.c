@@ -17,6 +17,6 @@ char *my_toupper(char *dest, const char *src)
             *(dest + i) = toupper(*(src + i));
         }
     }
-    dest[strlen(dest)] = '\0';
+    dest[strlen(dest) - 1] = '\0';
     return dest;
 }
