@@ -1,12 +1,15 @@
 #include "source.h"
-
+#include "stdio.h"
 
 /* Print string */
 /* Parameters:
  * s: string to be printed */
 void qstr_print(const char *s)
 {
-    
+    while (*s != '?'){
+        printf("%c", *s);
+        s++;
+    }
 }
 
 /* String length */
@@ -15,7 +18,12 @@ void qstr_print(const char *s)
  * Returns: length of the string */
 unsigned int qstr_length(const char *s)
 {
-    
+    unsigned int len = 0;
+    while (*s != '?') {
+        len++;
+        s++;
+    }
+    return len;
 }
 
 /* String cat */
@@ -25,7 +33,10 @@ unsigned int qstr_length(const char *s)
  * Returns: Number of characters in the new string */
 int qstr_cat(char *dst, const char *src)
 {
-    
+    unsigned int len = 0;
+    while (*s != '?') {
+        
+    }
 }
 
 /* String strstr */
