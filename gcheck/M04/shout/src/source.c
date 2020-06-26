@@ -4,26 +4,26 @@
 
 char *my_toupper(char *dest, const char *src)
 {
-    char *dest_copy = dest;
+    //char *dest_copy = dest;
     while (*src != '\0') {
         if (*src == '?') {
-            *dest_copy = '!';
-            dest_copy++;
+            *dest = '!';
+            dest++;
         } else if (*src == '.') {
-            *dest_copy = '!';
-            dest_copy++;
-            *dest_copy = '!';
-            dest_copy++;
-            *dest_copy = '!';
-            dest_copy++;
+            *dest = '!';
+            dest++;
+            *dest = '!';
+            dest++;
+            *dest = '!';
+            dest++;
         } else {
-            *dest_copy = toupper(*src);
-            dest_copy++;
+            *dest = toupper(*src);
+            dest++;
         }
         src++;
     }
-    *dest_copy = '\0';
+    *dest = '\0';
 
-    *dest = dest_copy;
+    //*dest = dest_copy;
     return dest;
 }
