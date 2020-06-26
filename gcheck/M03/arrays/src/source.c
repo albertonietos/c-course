@@ -22,5 +22,14 @@ int array_sum(int *array, int count)
  * returns: number of values read */
 unsigned int array_reader(int *vals, int n)
 {
-    
+    int ret = 0;
+    int read = 0;
+    int value;
+    ret = scanf("%d", &value);
+    while (ret == 1 && read < n) {
+        vals[read] = value;
+        read++;
+        ret = scanf("%d", &value);
+    }
+    return read;
 }
