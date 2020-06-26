@@ -25,5 +25,7 @@ char *my_toupper(char *dest, const char *src)
     *dest = '\0';
 
     //*dest = dest_copy;
-    return dest;
+
+    //return dest;
+    return &dest[0];
 }
