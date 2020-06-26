@@ -4,7 +4,7 @@
 
 char *my_toupper(char *dest, const char *src)
 {
-    //char *dest_copy = dest;
+    char *dest_copy = &dest[0];
     while (*src != '\0') {
         if (*src == '?') {
             *dest = '!';
@@ -27,5 +27,5 @@ char *my_toupper(char *dest, const char *src)
     //*dest = dest_copy;
 
     //return dest;
-    return &dest[0];
+    return dest_copy;
 }
