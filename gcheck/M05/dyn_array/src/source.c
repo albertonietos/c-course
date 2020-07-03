@@ -1,6 +1,7 @@
 
 #include "source.h"
-
+#include "stdlib.h"
+#include "stdio.h"
 
 /* Dynamic Array Reader */
 /* Parameters:
@@ -10,7 +11,13 @@
  */
 int *create_dyn_array(unsigned int n)
 {
-    
+    int *array = malloc(n * sizeof(int));
+    if (array) {
+        for (unsigned int i = 0; i < n; i++) {
+            scanf("%d", array++);
+        }
+    }
+    return array;
 }
 
 /* Add to array */
@@ -23,5 +30,13 @@ int *create_dyn_array(unsigned int n)
  */
 int *add_dyn_array(int *arr, unsigned int num, int newval)
 {
-    
+    int *new_array = realloc(arr, (num + 1) * sizeof(int));
+    if (new_array) {
+        while (*new_array) {
+            new_array++;
+        }
+        *new_array = newval;
+    }
+    return new_array;
 }
+
