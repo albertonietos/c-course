@@ -12,6 +12,7 @@
 int *create_dyn_array(unsigned int n)
 {
     int *array = malloc(n * sizeof(int));
+    
     if (array) {
         for (unsigned int i = 0; i < n; i++) {
             scanf("%d", &array[i]);
