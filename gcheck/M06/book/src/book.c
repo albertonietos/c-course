@@ -3,9 +3,7 @@
 #include <string.h>
 
 int init_book(struct book *p_book, const char *p_id, const char *p_title, const char *p_author, struct date release)
-{
-    // Allocate memory for book struct (not needed)
-    
+{  
     // Allocate memory to pointers: p_title, p_author, and copy the values in the right location
     p_book->title = malloc(strlen(p_title) + 1);
     if (p_book->title == NULL) {
@@ -21,8 +19,6 @@ int init_book(struct book *p_book, const char *p_id, const char *p_title, const 
     }
     strcpy(p_book->author, p_author);
     
-    //strcpy(p_book.id, p_id);
-    //p_book->id = *p_id;
     // Since id is a char array, we have to iterate
     for (int i = 0; i < 10; i++) {
         p_book->id[i] = p_id[i];

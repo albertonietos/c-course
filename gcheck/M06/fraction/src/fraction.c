@@ -1,5 +1,7 @@
 #include "fraction.h"
-
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /* Algorithm for determining greatest common divisor, needed in (d) */
 /* The function returns gcd between the two parameters, u and v */
@@ -41,23 +43,28 @@ unsigned int gcd(unsigned int u, unsigned int v)
  */
 Fraction* setFraction(unsigned int numerator, unsigned int denominator)
 {
-    
+    Fraction *frac = malloc(sizeof(struct fraction_st));
+    frac->num = numerator;
+    frac->den = denominator;
+    return frac;
 }
 
 unsigned int getNum(const Fraction *f)
 {
-    
+    assert(f);
+    return f->num;
 }
 
 unsigned int getDenom(const Fraction *f)
 {
-    
-    
+    assert(f);
+    return f->den;    
 }
 
 void freeFraction(Fraction *f)
 {
-    
+    assert(f);
+    free(f);
 }
 
 
@@ -71,7 +78,15 @@ void freeFraction(Fraction *f)
  */
 int compFraction(const Fraction *a, const Fraction *b)
 {
-    
+    assert(a);
+    assert(b);
+    if ((a->num / a->den) > (b->num / b->den)) {
+        return 1;
+    } else if ((a->num / a->den) == (b->num / b->den)) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 /* Exercise c: Add values
@@ -80,18 +95,25 @@ int compFraction(const Fraction *a, const Fraction *b)
  */
 Fraction* addFraction(const Fraction *a, const Fraction *b)
 {
-    
+    assert(a);
+    assert(b);
+    unsigned int num = (a->num * b->den) + (b->num * a->den);
+    unsigned int den = (a->den * b->den);
+    return setFraction(num, den);
 }
 
 /* Reduce fraction
  * Parameters: Fraction to be reduced. Reduction happens on the object itself */
 void reduceFraction(Fraction* val)
 {
-    
+    assert(val);
+    unsigned int divisor = gcd(val->num, val->den);
+    val->num /= divisor;
+    val->den /= divisor;
 }
 
 /* Not needed, but it will be useful to implement this */
 void printFraction(const Fraction *val)
 {
-    
+    printf("%f / %f", val->num, val->den);
 }
