@@ -12,7 +12,7 @@
  *  split: the string to split str with
  *
  * Returns:
- *  A dynamically reserved outputay of dynamically reserved string parts.
+ *  A dynamically reserved output array of dynamically reserved string parts.
  *
  * For example called with "Test string split" and " ",
  * returns ["Test", "string", "split", NULL].
@@ -52,7 +52,7 @@ char** split_string(const char *str, const char* split) {
     const char *new_ptr = strstr(str, split);
 
     for (unsigned int i = 0; i < (nbr_tokens - 1); i++) {
-        // Length of token
+        // Initialize length of token
         unsigned len = 0;
 
         // Get length of token to be added
@@ -96,7 +96,14 @@ void print_split_string(char **split_string) {
 }
 
 void free_split_string(char **split_string) {
-    
+    char **string = split_string;
+    // Free each element of the array
+    while (*string) {
+        free(*string);
+        string++;
+    }
+    // Free the array
+    free(split_string);
 }
 
 
