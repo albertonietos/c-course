@@ -28,7 +28,10 @@
  */
 void op_bit_set(unsigned char* data, int i)
 {
-    
+    int id_1 = i / 8;  // bit block position
+    int id_2 = i % 8;  // move id to position designated by i (out of 8)
+
+    data[id_1] = data[id_1] | (0x80 >> id_2);  // 0x80 is 1000 0000
 }
 
 /* DESCRIPTION:
@@ -51,7 +54,10 @@ void op_bit_set(unsigned char* data, int i)
 
 void op_bit_unset(unsigned char* data, int i)
 {
-    
+    int id_1 = i / 8;
+    int id_2 = i % 8;
+
+    data[id_1] = data[id_1] & ~(0x80 >> id_2);  // bit AND 0 at right position (else AND 1) 
 }
 
 /* DESCRIPTION:
@@ -74,7 +80,13 @@ void op_bit_unset(unsigned char* data, int i)
 
 int op_bit_get(const unsigned char* data, int i)
 {
-    
+    int id_1 = i / 8;
+    int id_2 = i % 8;
+
+    int b = data[id_1] >> (7 - id_2);  // get right index
+
+    // 0 else 1 otherwise
+    return b & 1;
 }
 
 /* DESCRIPTION:
@@ -104,7 +116,13 @@ int op_bit_get(const unsigned char* data, int i)
 
 void op_print_byte(unsigned char b)
 {
-    
+    for (unsigned int i = 0; i < 8; i++) {
+        if (b >> (7 - i) & 1) {
+            printf("1");
+        } else {
+            printf("0");
+        } 
+    }
 }
 
 /* DESCRIPTION:
@@ -141,6 +159,27 @@ void op_print_byte(unsigned char b)
 
 unsigned char op_bit_get_sequence(const unsigned char* data, int i, int how_many)
 {
-    
+    // Initialize output
+    unsigned char out = 0;
+
+    int id_1 = i / 8;
+    int id_2 = i % 8;
+
+    for (int i = 0; i < how_many; i++) {
+        op_print_byte(out);
+        printf("\n");
+        // Go to next bit
+        out = out << 1;
+
+        // Substitute bit value
+        out = out | ((data[id_1] >> (7 - id_2)) & 1);
+
+        // Move index to next bit
+        id_2 = (id_2 + 1) % 8;
+        if (id_2 == 0) {
+            id_1++;
+        }
+    }
+    return out;
 }
 
