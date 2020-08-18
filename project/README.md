@@ -22,7 +22,7 @@ The program has the following functions:
 
 * *W filename* : Saves all characters in the game (including the dead ones) to file named “filename”. (*1 p*)
 
-*O tiedosto* : Loads characters from file name “filename”, replacing the current setup in memory. (*1 p*)
+* *O tiedosto* : Loads characters from file name “filename”, replacing the current setup in memory. (*1 p*)
 
 * *Q* : **Exit program**: Quits program and releases all allocated memory. This function is must be implemented in order to detect possible memory leaks.
 
