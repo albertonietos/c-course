@@ -3,12 +3,12 @@
 #include <string.h>
 
 struct weapon {
-    const char *name;  // name of weapon
+    char *name;  // name of weapon
     int max_damage;  // maximum damage of weapon
 };
 
 struct fighter {
-    const char *name;  // name of character
+    char *name;  // name of character
     int hitpoints;  // health of character (hitpoints)
     int exp;  // experience points that increase when character hits opponent (starts at 0)
     struct weapon weapon;
@@ -34,7 +34,7 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
         return NULL;
     }
 
-    printf("Index where new fighter is inserted in DB: %d\n", i);
+    //printf("Index where new fighter is inserted in DB: %d\n", i);
     
     // Add character to database
     struct fighter f;
@@ -44,18 +44,16 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
     f.exp = 0;
     f.weapon.name = malloc(sizeof(char) * (strlen(weaponname) + 1));
     strcpy(f.weapon.name, weaponname);
-
     f.weapon.max_damage = weapondamage;
     new_db[i] = f;
 
     // Set new NULL member at the end
     new_db[i+1].name = NULL; 
 
-    //printf("%s %d %s %d\n", new_db[i].name, new_db[i].hitpoints, new_db[i].weaponname, new_db[i].weapondamage);
-    while (i != -1) {
+    /* while (i != -1) {
         printf("i=%d: %s %d %s %d\n", i, new_db[i].name, new_db[i].hitpoints, new_db[i].weapon.name, new_db[i].weapon.max_damage);
         i--;
-    }
+    } */
 
     printf("Added successfully!\n");
     return new_db;
@@ -64,18 +62,14 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
 struct fighter *attack(char *cmd, struct fighter *db) {
     char attack_name[80];
     char tgt_name[80];
-    //struct fighter *attacker = malloc(sizeof(struct fighter));
-    //struct fighter *target = malloc(sizeof(struct fighter));
 
     if (sscanf(cmd, "H %s %s", attack_name, tgt_name) < 2) {
         printf("Invalid attack command: %s", cmd);
     }
 
     // Find attacker's index in database
-    //struct fighter *copy_att = db;
     unsigned int i = 0;
     while (db[i].name != NULL) {
-        //if (db[i].name == attack_name) {
         if (strcmp(db[i].name, attack_name) == 0) {
             break;
         } else {
@@ -84,10 +78,8 @@ struct fighter *attack(char *cmd, struct fighter *db) {
     }
 
     // Find target's index in database
-    //struct fighter *copy_tgt = db;
     unsigned int j = 0;
     while (db[j].name != NULL) {
-        //if (db[j].name == tgt_name) {
         if (strcmp(db[j].name, tgt_name) == 0) {
             break;
         } else {
@@ -97,10 +89,16 @@ struct fighter *attack(char *cmd, struct fighter *db) {
 
     printf("Attacker index is %d, target index is %d.\n", i, j);
 
-    printf("%s attacked %s with %s by %d damage.\n", db[i].name, db[j].name, db[i].weapon.name, db[i].weapon.max_damage);
-    // Decrement target's HP by damage of attacker
+    printf("%s attacked %s with %s by %d damage. ", db[i].name, db[j].name, db[i].weapon.name, db[i].weapon.max_damage);
     
-   return NULL;
+    // Decrement target's HP by damage of attacker
+    db[j].hitpoints -= db[i].weapon.max_damage;
+    printf("%s has %d hitpoints remaining. ", db[j].name, db[j].hitpoints);
+
+    // Increment experience points of attacker by the amount of damage inflicted on the target
+    db[i].exp += db[i].weapon.max_damage;
+    printf("%s gained %d experience points.\n", db[i].name, db[i].weapon.max_damage);
+    return db;
 }
 
 void list_characters(struct fighter *db) {
