@@ -8,7 +8,7 @@ Implement a small role playing game, in which the game characters fight against 
 
 * **Experience points** (Exp) that increases when the character hits its opponents in the fight. You can decide how the experience points increase (for example, by the amount of inflicted damage, with bonus on slaying, etc,). The experience points always start from zero on a new character.
 
-* **Weapon** (i.e., a string with the weapoin name), and its **maximum damage**. In the simpliest form the weapon can always inflict the same amount of damage, but you can define also so that a hit causes a random amount of damage.
+* **Weapon** (i.e., a string with the weapon name), and its **maximum damage**. In the simpliest form the weapon can always inflict the same amount of damage, but you can define also so that a hit causes a random amount of damage.
 
 In the game one can create arbitrary many characters, that are being tracked by the game.
 
