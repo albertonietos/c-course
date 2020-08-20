@@ -87,39 +87,37 @@ struct fighter *attack(char *cmd, struct fighter *db) {
         }
     }
 
-    printf("Attacker index is %d, target index is %d.\n", i, j);
+    //printf("Attacker index is %d, target index is %d.\n", i, j);
+
+    // Catch situations where dead people try to attack
+    if (db[i].hitpoints == 0) {
+        printf("%s can not attack %s because he/she is dead.\n", db[i].name, db[j].name);
+        return db;
+    } else if (db[j].hitpoints == 0) {
+        printf("%s was attacked by %s, but he was already dead. No experience gained.\n", db[j].name, db[i].name);
+        return db;
+    }
 
     printf("%s attacked %s with %s by %d damage. ", db[i].name, db[j].name, db[i].weapon.name, db[i].weapon.max_damage);
     
     // Decrement target's HP by damage of attacker
     db[j].hitpoints -= db[i].weapon.max_damage;
+
+    // Minimum amount of HP is zero
+    if (db[j].hitpoints < 0) db[j].hitpoints = 0;
     printf("%s has %d hitpoints remaining. ", db[j].name, db[j].hitpoints);
 
     // Increment experience points of attacker by the amount of damage inflicted on the target
     db[i].exp += db[i].weapon.max_damage;
     printf("%s gained %d experience points.\n", db[i].name, db[i].weapon.max_damage);
+    
     return db;
 }
 
 void list_characters(struct fighter *db) {
-
-    /* unsigned int i = 0;
-    while (db[i].name != NULL) {
-        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
-        i++;
-    } */
-
     // Get number of elements in database
     int sz = 1;
     while (db[sz-1].name != NULL) sz++;
-    
-    /* // Create array of indices
-
-    int list[sz] = malloc(sizeof(int) * sz);
-    for (unsigned int i = 0; i < sz; i++) list[i] = i;
-    
-    //for (int j = 0; j < sz; j++) printf("%d", list[j]);
-    for (int j = 0; j < sz; j++) printf("%s\n", db[list[j]].name); */
 
     // Sort the list indices based on the experience points
     struct fighter buffer;
@@ -136,11 +134,15 @@ void list_characters(struct fighter *db) {
 
     // Print ordered database
     unsigned int i = 0;
-    while (db[i].name != NULL) {
+    while (db[i].name != NULL && db[i].hitpoints > 0) {
         printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
         i++;
     }
-
+    // Print the dead characters at the end
+    while (db[i].name != NULL && db[i].hitpoints == 0) {
+        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+        i++;
+    }
     return;
 }
 
@@ -172,6 +174,9 @@ int main(void) {
             list_characters(db);
             break;
 
+        case 'W':
+            // Save all characters in the game to 'filename'
+
         case 'Q':
             // To exit program, we change the value of repeat to 0 to exit loop
             printf("Bye!\n");
@@ -179,7 +184,7 @@ int main(void) {
             break;
 
         default:
-        printf("Invalid command.\n");
+            printf("Invalid command.\n");
             break;
         }
     }
