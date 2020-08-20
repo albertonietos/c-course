@@ -102,12 +102,19 @@ struct fighter *attack(char *cmd, struct fighter *db) {
 }
 
 void list_characters(struct fighter *db) {
+    /* unsigned int i = 0;
+    printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+    i++;
+    printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+ */
+    /* for (unsigned int i = 0; i < 5; i++) {
+        printf("%s %d %d %s %d", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+    } */
     unsigned int i = 0;
-    printf("%s %d %s %d\n", db[i].name, db[i].hitpoints, db[i].weapon.name, db[i].weapon.max_damage);
-
-    /*while (db[i].name != NULL || i > 10) {
-        printf("%s %d %s %d", db[i].name, db[i].hitpoints, db[i].weaponname, db[i].weapondamage);
-    }*/
+    while (db[i].name != NULL) {
+        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+        i++;
+    }
     return;
 }
 
