@@ -102,19 +102,45 @@ struct fighter *attack(char *cmd, struct fighter *db) {
 }
 
 void list_characters(struct fighter *db) {
+
     /* unsigned int i = 0;
-    printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
-    i++;
-    printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
- */
-    /* for (unsigned int i = 0; i < 5; i++) {
-        printf("%s %d %d %s %d", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+    while (db[i].name != NULL) {
+        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+        i++;
     } */
+
+    // Get number of elements in database
+    int sz = 1;
+    while (db[sz-1].name != NULL) sz++;
+    
+    /* // Create array of indices
+
+    int list[sz] = malloc(sizeof(int) * sz);
+    for (unsigned int i = 0; i < sz; i++) list[i] = i;
+    
+    //for (int j = 0; j < sz; j++) printf("%d", list[j]);
+    for (int j = 0; j < sz; j++) printf("%s\n", db[list[j]].name); */
+
+    // Sort the list indices based on the experience points
+    struct fighter buffer;
+    for (unsigned int i = 0; i < sz; i++) {
+        for (unsigned int j = i + 1; j < sz; j++) {
+            // If exp points of i is smaller than the next swap them
+            if (db[i].exp < db[j].exp) {
+                buffer = db[i];
+                db[i] = db[j];
+                db[j] = buffer;
+            }
+        }
+    }
+
+    // Print ordered database
     unsigned int i = 0;
     while (db[i].name != NULL) {
         printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
         i++;
     }
+
     return;
 }
 
