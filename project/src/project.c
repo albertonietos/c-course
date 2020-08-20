@@ -24,8 +24,6 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
         printf("Invalid add command: %s\n", cmd);
     }
 
-    // allocate memory 
-
     // Increase i until we arrive at array member with NULL name
     unsigned int i;
     for (i = 0; db[i].name != NULL; i++);
@@ -39,38 +37,19 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
     printf("Index where new fighter is inserted in DB: %d\n", i);
     
     // Add character to database
-    /*new_db[i].name = name;
-    strcpy(new_db[i].name, name);
-    new_db[i].hitpoints = hitpoints;
-    new_db[i].exp = 0;
-    new_db[i].weapon.name = weaponname;
-    new_db[i].weapon.max_damage = weapondamage;*/
     struct fighter f;
     f.name = malloc(sizeof(char) * (strlen(name) + 1));
     strcpy(f.name, name);
-    //f.name = name;
     f.hitpoints = hitpoints;
     f.exp = 0;
     f.weapon.name = malloc(sizeof(char) * (strlen(weaponname) + 1));
     strcpy(f.weapon.name, weaponname);
-    //f.weapon.name = weaponname;
+
     f.weapon.max_damage = weapondamage;
     new_db[i] = f;
 
     // Set new NULL member at the end
-    new_db[i+1].name = NULL;
-
-    /*
-    struct fighter *character = malloc(sizeof(struct fighter));
-
-    // Assign values
-    character->name = name;
-    character->hitpoints = hitpoints;
-    character->exp = 0;
-    character->weaponname = weaponname;
-    character->weapondamage = weapondamage;
-    */
-    
+    new_db[i+1].name = NULL; 
 
     //printf("%s %d %s %d\n", new_db[i].name, new_db[i].hitpoints, new_db[i].weaponname, new_db[i].weapondamage);
     while (i != -1) {
