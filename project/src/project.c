@@ -16,15 +16,16 @@ struct fighter {
     struct weapon weapon;
 };
 
-struct fighter *add_character(char *cmd, struct fighter *db) {
-    char name[MAX_LENGTH];
+struct fighter *add_character(char *name, int hitpoints, int exp, char *weaponname, int weapondamage, struct fighter *db) {
+//struct fighter *add_character(char *cmd, struct fighter *db) {
+    /* char name[MAX_LENGTH];
     int hitpoints;
     char weaponname[MAX_LENGTH];
     int weapondamage;
 
     if (sscanf(cmd, "A %s %d %s %d", name, &hitpoints, weaponname, &weapondamage) < 4) {
         printf("Invalid add command: %s\n", cmd);
-    }
+    } */
 
     // Increase i until we arrive at array member with NULL name
     unsigned int i;
@@ -41,7 +42,7 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
     f.name = malloc(sizeof(char) * (strlen(name) + 1));
     strcpy(f.name, name);
     f.hitpoints = hitpoints;
-    f.exp = 0;
+    f.exp = exp;
     f.weapon.name = malloc(sizeof(char) * (strlen(weaponname) + 1));
     strcpy(f.weapon.name, weaponname);
     f.weapon.max_damage = weapondamage;
@@ -144,7 +145,7 @@ int save_game(struct fighter *db, char *filename) {
     // Open file for writing
     FILE *file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "Opening file failed. Game not saved.\n");
+        fprintf(stderr, "Opening of file failed. Game not saved.\n");
         return 0;
     }
 
@@ -161,7 +162,29 @@ int save_game(struct fighter *db, char *filename) {
     return 1;
 }
 
+struct fighter *load_game(struct fighter *db, char *filename) {
+    // Open file for reading
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        fprintf(stderr, "Opening of file failed. Game not loaded.\n");
+    }
 
+    char name[MAX_LENGTH];
+    int hitpoints;
+    int exp;
+    char weaponname[MAX_LENGTH];
+    int weapondamage;
+    while (fscanf(file, "A %s %d %d %s %d", name, &hitpoints, &exp, weaponname, &weapondamage) == 5) {
+        add_character(name, hitpoints, exp, weaponname, weapondamage, db);
+    }
+
+
+    // Close file
+    fclose(file);
+
+    return NULL;
+
+}
 int main(void) {
     struct fighter *db = malloc(sizeof(struct fighter));    
     int repeat = 1;
@@ -177,10 +200,19 @@ int main(void) {
 
         switch (ret[0])
         {
-        case 'A':
-            db = add_character(buffer, db);
+        case 'A': {  // brackets needed because of variable declarations
+            char name[MAX_LENGTH], weaponname[MAX_LENGTH];
+            int hitpoints, weapondamage;
+            int exp = 0;  // characters start with 0 experience points
+            if (sscanf(buffer, "A %s %d %s %d", name, &hitpoints, weaponname, &weapondamage) < 4) {
+                printf("Invalid add command: %s\n", buffer);
+                break;
+            }
+
+            db = add_character(name, hitpoints, exp, weaponname, weapondamage, db);
             break;
-        
+        }
+
         case 'H':
             db = attack(buffer, db);
             break;
@@ -189,7 +221,7 @@ int main(void) {
             list_characters(db);
             break;
 
-        case 'W': {  // brackets needed because of filename declaration
+        case 'W': {
             // Check input
             char filename[MAX_LENGTH];
             if (sscanf(buffer, "W %s", filename) < 1) {
