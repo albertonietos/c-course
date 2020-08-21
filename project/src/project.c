@@ -1,20 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "projekti.h"
 
 #define MAX_LENGTH 80
-
-struct weapon {
-    char *name;  // name of weapon
-    int max_damage;  // maximum damage of weapon
-};
-
-struct fighter {
-    char *name;  // name of character
-    int hitpoints;  // health of character (hitpoints)
-    int exp;  // experience points that increase when character hits opponent (starts at 0)
-    struct weapon weapon;
-};
 
 struct fighter *add_character(char *name, int hitpoints, int exp, char *weaponname, int weapondamage, struct fighter *db) {
     // Increase i until we arrive at array member with NULL name
@@ -52,6 +41,7 @@ struct fighter *add_character(char *name, int hitpoints, int exp, char *weaponna
 
     // Set new NULL member at the end
     new_db[i+1].name = NULL; 
+    new_db[i+1].exp = 0;
 
     printf("Added successfully!\n");
     return new_db;
@@ -117,7 +107,18 @@ struct fighter *attack(char *cmd, struct fighter *db) {
 }
 
 void list_characters(struct fighter *db) {
+    // Check if database is empty
+    if (db[0].name == NULL) {
+        printf("Database contains no characters.\n");
+        return;
+    }
+
     // Get number of elements in database
+    /* unsigned int sz = 1, n = 0;
+    while (db[n].name != NULL) {
+        n++;
+        sz++;
+    } */
     int sz = 1;
     while (db[sz-1].name != NULL) sz++;
 
@@ -201,6 +202,12 @@ struct fighter *load_game(char *filename) {
     return new_db;
 
 }
+
+void release_fighter(struct fighter *f) {
+    free(f->name);
+    free(f);
+}
+
 int main(void) {
     struct fighter *db = malloc(sizeof(struct fighter));
     if (db == NULL) {
@@ -208,6 +215,10 @@ int main(void) {
         free(db);
 
     }
+    // Initialize value for name to NULL and experience to 0 points
+    db->name = NULL;
+    db->exp = 0;
+
     int repeat = 1;
     char buffer[MAX_LENGTH];
 
@@ -285,5 +296,8 @@ int main(void) {
     }
 
     // release memory and cleanup
+    free(db->name);
     free(db);
+
+    return repeat;
 }
