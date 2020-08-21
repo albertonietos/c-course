@@ -203,9 +203,10 @@ struct fighter *load_game(char *filename) {
 
 }
 
-void release_fighter(struct fighter *f) {
-    free(f->name);
-    free(f);
+void release_fighter(struct fighter f) {
+    free(f.name);
+    free(f.weapon.name);
+    //free(f);
 }
 
 int main(void) {
@@ -296,7 +297,11 @@ int main(void) {
     }
 
     // release memory and cleanup
-    free(db->name);
+    unsigned int i = 0;
+    while (db[i].name != NULL) {
+        release_fighter(db[i]);
+        i++;
+    }
     free(db);
 
     return repeat;

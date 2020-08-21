@@ -40,6 +40,6 @@ int save_game(struct fighter *db, char *filename);
 struct fighter *load_game(char *filename);
 
 /* Method to release memory allocated to each fighter */
-void release_fighter(struct fighter *f);
+void release_fighter(struct fighter f);
 
 #endif
