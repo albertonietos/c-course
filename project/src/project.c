@@ -77,7 +77,7 @@ struct fighter *attack(char *cmd, struct fighter *db) {
 
     // Catch situations where one of the fighters is not in the database
     if (db[i].name == NULL || db[j].name == NULL) {
-        printf("One of the characters is not in the database. Try again.\n");
+        printf("One/both of the characters is/are not in the database. Try again.\n");
         return db;
     }
 
@@ -137,16 +137,22 @@ void list_characters(struct fighter *db) {
 
     // Print ordered database
     unsigned int i = 0;
-    while (db[i].name != NULL && db[i].hitpoints > 0) {
-        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+    while (db[i].name != NULL) {
+        if (db[i].hitpoints > 0) {
+            printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+        }
         i++;
     }
 
     // Print the dead characters at the end
-    while (db[i].name != NULL && db[i].hitpoints == 0) {
-        printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
-        i++;
+    unsigned int j = 0;
+    while (db[j].name != NULL) {
+        if (db[j].hitpoints == 0) {
+            printf("%s %d %d %s %d\n", db[j].name, db[j].hitpoints, db[j].exp, db[j].weapon.name, db[j].weapon.max_damage);
+        }
+        j++;
     }
+
     return;
 }
 
@@ -186,6 +192,9 @@ struct fighter *load_game(char *filename) {
         free(new_db);
         return NULL;
     }
+    // Initialize value for name to NULL and experience to 0 points
+    new_db->name = NULL;
+    new_db->exp = 0;
 
     char name[MAX_LENGTH];
     int hitpoints;
