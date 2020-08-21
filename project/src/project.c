@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LENGTH 80
+
 struct weapon {
     char *name;  // name of weapon
     int max_damage;  // maximum damage of weapon
@@ -15,9 +17,9 @@ struct fighter {
 };
 
 struct fighter *add_character(char *cmd, struct fighter *db) {
-    char name[80];
+    char name[MAX_LENGTH];
     int hitpoints;
-    char weaponname[80];
+    char weaponname[MAX_LENGTH];
     int weapondamage;
 
     if (sscanf(cmd, "A %s %d %s %d", name, &hitpoints, weaponname, &weapondamage) < 4) {
@@ -33,8 +35,6 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
     if (new_db == NULL) {
         return NULL;
     }
-
-    //printf("Index where new fighter is inserted in DB: %d\n", i);
     
     // Add character to database
     struct fighter f;
@@ -50,18 +50,13 @@ struct fighter *add_character(char *cmd, struct fighter *db) {
     // Set new NULL member at the end
     new_db[i+1].name = NULL; 
 
-    /* while (i != -1) {
-        printf("i=%d: %s %d %s %d\n", i, new_db[i].name, new_db[i].hitpoints, new_db[i].weapon.name, new_db[i].weapon.max_damage);
-        i--;
-    } */
-
     printf("Added successfully!\n");
     return new_db;
 }
 
 struct fighter *attack(char *cmd, struct fighter *db) {
-    char attack_name[80];
-    char tgt_name[80];
+    char attack_name[MAX_LENGTH];
+    char tgt_name[MAX_LENGTH];
 
     if (sscanf(cmd, "H %s %s", attack_name, tgt_name) < 2) {
         printf("Invalid attack command: %s", cmd);
@@ -86,8 +81,6 @@ struct fighter *attack(char *cmd, struct fighter *db) {
             j++;
         }
     }
-
-    //printf("Attacker index is %d, target index is %d.\n", i, j);
 
     // Catch situations where dead people try to attack
     if (db[i].hitpoints == 0) {
@@ -138,6 +131,7 @@ void list_characters(struct fighter *db) {
         printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
         i++;
     }
+
     // Print the dead characters at the end
     while (db[i].name != NULL && db[i].hitpoints == 0) {
         printf("%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
@@ -146,14 +140,35 @@ void list_characters(struct fighter *db) {
     return;
 }
 
+int save_game(struct fighter *db, char *filename) {
+    // Open file for writing
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        fprintf(stderr, "Opening file failed. Game not saved.\n");
+        return 0;
+    }
+
+    // Write one character at a time to file
+    unsigned int i = 0;
+    while (db[i].name != NULL) {
+        fprintf(file, "%s %d %d %s %d\n", db[i].name, db[i].hitpoints, db[i].exp, db[i].weapon.name, db[i].weapon.max_damage);
+        i++;
+    }
+
+    // Close file
+    fclose(file);
+
+    return 1;
+}
+
 
 int main(void) {
     struct fighter *db = malloc(sizeof(struct fighter));    
     int repeat = 1;
-    char buffer[80];
+    char buffer[MAX_LENGTH];
 
     while(repeat) {
-        char *ret = fgets(buffer, 80, stdin);
+        char *ret = fgets(buffer, MAX_LENGTH, stdin);
 
         if (ret == NULL) {
             printf("fgets returns NULL\n");
@@ -174,9 +189,33 @@ int main(void) {
             list_characters(db);
             break;
 
-        case 'W':
-            // Save all characters in the game to 'filename'
+        case 'W': {  // brackets needed because of filename declaration
+            // Check input
+            char filename[MAX_LENGTH];
+            if (sscanf(buffer, "W %s", filename) < 1) {
+                printf("Invalid saving command: %s", buffer);
+                break;
+            }
 
+            // Save all characters in the game to 'filename'
+            if (save_game(db, filename)) {
+                printf("Game saved succesfully!\n");
+            }
+            break;
+        }
+
+        case 'O': {
+            char filename[MAX_LENGTH];
+            if (sscanf(buffer, "O %s", filename) < 1) {
+                printf("Invalid loading command: %s", buffer);
+                break;
+            }
+
+            // Load characters into the game from 'filename'
+            if (load_game(db, filename)) {
+                printf("Game loaded successfully!");
+            }
+        }
         case 'Q':
             // To exit program, we change the value of repeat to 0 to exit loop
             printf("Bye!\n");
@@ -190,4 +229,5 @@ int main(void) {
     }
 
     // release memory and cleanup
+    free(db);
 }
