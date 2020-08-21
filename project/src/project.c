@@ -17,26 +17,28 @@ struct fighter {
 };
 
 struct fighter *add_character(char *name, int hitpoints, int exp, char *weaponname, int weapondamage, struct fighter *db) {
-//struct fighter *add_character(char *cmd, struct fighter *db) {
-    /* char name[MAX_LENGTH];
-    int hitpoints;
-    char weaponname[MAX_LENGTH];
-    int weapondamage;
-
-    if (sscanf(cmd, "A %s %d %s %d", name, &hitpoints, weaponname, &weapondamage) < 4) {
-        printf("Invalid add command: %s\n", cmd);
-    } */
-
     // Increase i until we arrive at array member with NULL name
     unsigned int i;
     for (i = 0; db[i].name != NULL; i++);
 
+    // Make sure that the character does not already exist in the database
+    unsigned int j = 0;
+    while (db[j].name != NULL) {
+        if (strcmp(db[j].name, name) == 0) {
+            printf("This character is already in the database.\n");
+            return db;
+        } else {
+            j++;
+        }
+    }
+
     // Increase size of the database by one, and reserve space for final NULL member
     struct fighter *new_db = realloc(db, sizeof(struct fighter) * (i + 2));
     if (new_db == NULL) {
+        printf("Memory allocation failed.\n");
         return NULL;
     }
-    
+
     // Add character to database
     struct fighter f;
     f.name = malloc(sizeof(char) * (strlen(name) + 1));
@@ -81,6 +83,12 @@ struct fighter *attack(char *cmd, struct fighter *db) {
         } else {
             j++;
         }
+    }
+
+    // Catch situations where one of the fighters is not in the database
+    if (db[i].name == NULL || db[j].name == NULL) {
+        printf("One of the characters is not in the database. Try again.\n");
+        return db;
     }
 
     // Catch situations where dead people try to attack
@@ -162,11 +170,20 @@ int save_game(struct fighter *db, char *filename) {
     return 1;
 }
 
-struct fighter *load_game(struct fighter *db, char *filename) {
+struct fighter *load_game(char *filename) {
     // Open file for reading
     FILE *file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "Opening of file failed. Game not loaded.\n");
+        return NULL;
+    }
+
+    // Replace current database with a new one
+    struct fighter *new_db = malloc(sizeof(struct fighter));
+    if (new_db == NULL) {
+        printf("Memory allocation failed.\n");
+        free(new_db);
+        return NULL;
     }
 
     char name[MAX_LENGTH];
@@ -174,19 +191,23 @@ struct fighter *load_game(struct fighter *db, char *filename) {
     int exp;
     char weaponname[MAX_LENGTH];
     int weapondamage;
-    while (fscanf(file, "A %s %d %d %s %d", name, &hitpoints, &exp, weaponname, &weapondamage) == 5) {
-        add_character(name, hitpoints, exp, weaponname, weapondamage, db);
+    while (fscanf(file, "%s %d %d %s %d", name, &hitpoints, &exp, weaponname, &weapondamage) == 5) {
+        new_db = add_character(name, hitpoints, exp, weaponname, weapondamage, new_db);
     }
-
 
     // Close file
     fclose(file);
 
-    return NULL;
+    return new_db;
 
 }
 int main(void) {
-    struct fighter *db = malloc(sizeof(struct fighter));    
+    struct fighter *db = malloc(sizeof(struct fighter));
+    if (db == NULL) {
+        printf("Memory allocation failed.\n");
+        free(db);
+
+    }
     int repeat = 1;
     char buffer[MAX_LENGTH];
 
@@ -244,10 +265,13 @@ int main(void) {
             }
 
             // Load characters into the game from 'filename'
-            if (load_game(db, filename)) {
-                printf("Game loaded successfully!");
+            db = load_game(filename);
+            if (db != NULL) {
+                printf("Game loaded successfully!\n");
             }
+            break;
         }
+
         case 'Q':
             // To exit program, we change the value of repeat to 0 to exit loop
             printf("Bye!\n");
