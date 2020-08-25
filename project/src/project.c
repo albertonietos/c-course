@@ -114,11 +114,6 @@ void list_characters(struct fighter *db) {
     }
 
     // Get number of elements in database
-    /* unsigned int sz = 1, n = 0;
-    while (db[n].name != NULL) {
-        n++;
-        sz++;
-    } */
     int sz = 1;
     while (db[sz-1].name != NULL) sz++;
 
